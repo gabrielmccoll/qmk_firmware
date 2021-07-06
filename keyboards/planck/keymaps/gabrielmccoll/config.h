@@ -6,3 +6,4 @@
 
 #endif
 
+#define USB_MAX_POWER_CONSUMPTION 99
