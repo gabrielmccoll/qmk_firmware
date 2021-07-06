@@ -60,12 +60,14 @@ enum planck_keycodes {
   BACKLIT,
   EXT_PLV,
   BRACKETS,
-  MOUSE
+  MOUSE,
+  ADJUST 
 };
 
 #define LOWER MO(_LOWER)
 #define RAISE MO(_RAISE)
-#define _QWERTY 1
+#define _QWERTY 2
+#define _RAISE 1
 #define _COLEMAK 0
 
 
@@ -86,7 +88,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,    XXXXXXX,    XXXXXXX,    KC_J,    KC_L,    KC_U,    KC_Y, KC_BSPC,
     KC_A,    KC_R,    KC_S,    KC_T,    KC_G,    XXXXXXX,    XXXXXXX,    KC_M,    KC_N,    KC_E,    KC_I,    KC_O,
     KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,    XXXXXXX,    XXXXXXX,    KC_K,    KC_H, KC_COMM, KC_DOT,  KC_SLSH ,
-    XXXXXXX, OSL(_BRACKETS), KC_LALT, LOWER, KC_SPC,   KC_NO,  KC_NO,  KC_RSFT,   RAISE, KC_RCTL, XXXXXXX,   XXXXXXX
+    XXXXXXX, OSL(_BRACKETS), KC_LALT, OSL(_LOWER), KC_SPC,   XXXXXXX,  XXXXXXX,  KC_RSFT,   OSL(_RAISE), KC_RCTL, XXXXXXX,   OSL(_ADJUST)
 ),
 /* Qwerty
  * ,-----------------------------------------------------------------------------------.
@@ -152,10 +154,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_RAISE] = LAYOUT_planck_grid(
-    KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
-    KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, KC_BSLS,
-    _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_NUHS, KC_NUBS, KC_PGUP, KC_PGDN, _______,
-    KC_PSCREEN, _______, _______, _______, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY
+    KC_DEL, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT,    XXXXXXX,    XXXXXXX,    KC_MINUS,    KC_7,    KC_8,    KC_9,    _______,
+    XXXXXXX,  XXXXXXX,   XXXXXXX,   XXXXXXX,   XXXXXXX,   XXXXXXX,    XXXXXXX,   KC_EQL, KC_4,    KC_5,    KC_6, KC_BSLS,
+    _______, XXXXXXX,   XXXXXXX,   XXXXXXX,   XXXXXXX,  XXXXXXX,    XXXXXXX,  KC_0, KC_1,    KC_2,    KC_3, _______,
+    KC_PSCREEN, _______, _______, _______, _______, _______, _______, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
 ),
 
 /* Adjust (Lower + Raise)
@@ -197,9 +199,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 
-layer_state_t layer_state_set_user(layer_state_t state) {
-  return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
-}
+// layer_state_t layer_state_set_user(layer_state_t state) {
+//   return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+// }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
@@ -218,6 +220,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case MOUSE:
       if (record->event.pressed) {
         set_single_persistent_default_layer(_MOUSE);
+      }
+      return false;
+      break;
+    case ADJUST:
+      if (record->event.pressed) {
+        set_single_persistent_default_layer(_ADJUST);
       }
       return false;
       break;
